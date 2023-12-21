@@ -1,2 +1,3 @@
 # MyNote
-TroubleShooting and Note
+
+> 개발하면서 헷갈렸던 개념, 트러블슈팅 정리
