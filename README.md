@@ -4,6 +4,30 @@
 
 # 트러블슈팅
 
+**JSP web.xml 파일 &설정**
+
+* JSP2.3 웹프로그래밍 책을 참고하면서 web.xml 파일을 설정하다가 밑에 해당하는 에러가 발생했다.
+
+* org.xml.sax.SAXParseException; systemId: file:/D:/Workspace/.metadata/.plugins/org.eclipse.wst.server.core/tmp0/wtpwebapps/Chap20/WEB-INF/web.xml; lineNumber: 13; columnNumber: 82; "characterEncoding" 엔티티에 대한 참조는 ';' 구분자로 끝나야 합니다.
+
+```java
+// Before
+jdbcUrl=jdbc:mysql://localhost:3306/guestbook?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC
+
+// After
+jdbcUrl=jdbc:mysql://localhost:3306/guestbook?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false&amp;serverTimezone=UTC
+
+& : &amp;
+< : &lt;
+> : &gt;
+‘ : &apos;
+” : &quot;
+```
+
+* 알고보니 web.xml에는 & 문자를 사용할 수 없다는 간단한 문제였다.
+* web.xml에는 특수문자를 사용하지 못하니 & 은 &amp; 으로 적어주어야한다.
+* 위의 특수기호들(&, >, <, ', ") 은 메모해두고 필요할 때 사용하자.
+
 # 디자인 패턴
 
 * 디자인 패턴은 개발하면서 발생하는 반복적인 문제들을 OOP 4대 특성(캡슐화, 상속, 추상화, 다형성)과 SOLID 설계 원칙을 기반으로 구현되어있는 패턴들입니다.
