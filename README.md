@@ -28,6 +28,17 @@ jdbcUrl=jdbc:mysql://localhost:3306/guestbook?useUnicode=true&amp;characterEncod
 * web.xml에는 특수문자를 사용하지 못하니 & 은 &amp; 으로 적어주어야한다.
 * 위의 특수기호들(&, >, <, ', ") 은 메모해두고 필요할 때 사용하자.
 
+# CSS
+
+**padding이 max-width 계산에 포함되지 않는 경우**
+
+* padding은 내부 영역에만 적용되어 박스 모델의 너비 계산에는 포함되지 않습니다.
+* 따라서, padding은 이와 별도로 고려해야합니다.
+
+* input text가 max-width 를 해도 계속 범위에서 벗어나서 아래 명령어를 적어줬더니 정상 작동했다.
+* box-sizing: border-box; 
+
+
 # 디자인 패턴
 
 * 디자인 패턴은 개발하면서 발생하는 반복적인 문제들을 OOP 4대 특성(캡슐화, 상속, 추상화, 다형성)과 SOLID 설계 원칙을 기반으로 구현되어있는 패턴들입니다.
