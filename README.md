@@ -43,7 +43,98 @@ jdbcUrl=jdbc:mysql://localhost:3306/guestbook?useUnicode=true&amp;characterEncod
 
 * 디자인 패턴은 개발하면서 발생하는 반복적인 문제들을 OOP 4대 특성(캡슐화, 상속, 추상화, 다형성)과 SOLID 설계 원칙을 기반으로 구현되어있는 패턴들입니다.
 
-## 커맨드 패턴
+## 1. 싱글톤 패턴
+
+* 어떠한 클래스가 유일하게 1개만 존재 할 때 사용합니다.
+* 주로 서로 자원을 공유할 때 사용하며, 실물 세계에서는 프린터, 프로그래밍에서는 TCP Socket 통신에서 서버와 연결된 connect 객체에 주로 사용합니다.
+
+```java
+package singleton;
+
+public class SocketClient {
+
+	// 싱글톤 패턴 - 자기 자신을 객체로 가지고 있는 것 
+	private static SocketClient socketClient = null;
+	
+	// 기본 생성자로 만들 수 없도록 private 으로 설정
+	private SocketClient() {
+		
+	}
+	
+	public static SocketClient getInstance() {
+		
+		if(socketClient == null) {
+			socketClient= new SocketClient();
+		}
+		return socketClient;
+	}
+	
+	public void connect() {
+		System.out.println("connet");
+	}
+}
+```
+
+* 자기 자신을 객체로 가지고 있는 싱글톤 패턴 클래스를 생성합니다.
+* 생성할 때는 기본생성자에 접근하여 데이터를 변경할 수 없도록 private 으로 설정합니다.
+* 객체를 생성할 때는 static 메서드인 getInstance 를 통해 null 파악 유무 파악 후 객체를 생성하게 됩니다.
+
+```java
+package singleton;
+
+public class AClazz {
+
+	private SocketClient socketClient;
+	
+	public AClazz() {
+		this.socketClient = socketClient.getInstance();
+	}
+	
+	public SocketClient getSocketClient() {
+		return this.socketClient;
+	}
+}
+
+package singleton;
+
+public class BClazz {
+
+	private SocketClient socketClient;
+	
+	public BClazz() {
+		this.socketClient = SocketClient.getInstance();
+	}
+	
+	public SocketClient getSocketClient() {
+		return this.socketClient;
+	}
+}
+
+
+import singleton.AClazz;
+import singleton.BClazz;
+import singleton.SocketClient;
+
+public class Main {
+	public static void main(String[] args){
+
+		AClazz aClazz = new AClazz();
+		BClazz bClazz = new BClazz();
+		
+		SocketClient aClient = aClazz.getSocketClient();
+		SocketClient bClient = bClazz.getSocketClient();
+		
+		System.out.println("두 객체 동일한가?");
+		System.out.println(aClient.equals(bClient));
+	}
+}
+
+```
+
+* A와 B 클래스 생성 후에 equals 메서드를 통해 console에 찍어보면 true 결과값이 나옵니다.
+* 싱글톤 패턴을 사용해서 사용하는 것이 아닌 각각 기본 생성자를 통해 객체를 생성하면 false 결과값이 나옵니다.
+
+## 2. 커맨드 패턴
 
 * 하나의 객체를 통해 여러 객체들에 명령을 할 때 사용하는 패턴입니다.
 * 요청을 캡슐화함으로써 여러 기능을 실행할 수 있는 재사용성이 높은 클래스를 설계하는 패턴입니다.
