@@ -134,7 +134,119 @@ public class Main {
 * A와 B 클래스 생성 후에 equals 메서드를 통해 console에 찍어보면 true 결과값이 나옵니다.
 * 싱글톤 패턴을 사용해서 사용하는 것이 아닌 각각 기본 생성자를 통해 객체를 생성하면 false 결과값이 나옵니다.
 
-## 2. 커맨드 패턴
+## 2. 어뎁터 패턴
+
+* Adapter 패턴은 실생활에서 100v를 220v 를 변경하는 돼지코 변환기를 예로 들 수 있습니다.
+* **호환성이 없는 기존 클래스의 인터페이스를 변환하여 재사용** 할 수 있도록 합니다.
+* SOLID 중에서 **개방폐쇄 원칙(OCP)** 를 따릅니다.
+
+```java
+package adapter;
+
+public class HairDryer implements Electronic110V{
+
+	@Override
+	public void powerOn() {
+		System.out.println("헤어 드라이기 110V On");
+	}
+}
+
+package adapter;
+
+public class AirConditioner implements Electronic220V{
+
+	@Override
+	public void connect() {
+		System.out.println("에어컨 220V On");
+	}
+}
+
+
+public class Cleaner implements Electronic220V{
+
+	@Override
+	public void connect() {
+		System.out.println("청소기 220V On");
+	}
+}
+
+```
+
+* 헤어드라이기만 110V 를 쓴다고 가정하고 각각의 사물들의 클래스를 생성합니다.
+
+```java
+public interface Electronic220V {
+
+	void connect();
+}
+
+public interface Electronic110V {
+
+	void powerOn();
+}
+```
+
+* 220V와 110V 인터페이스를 생성합니다.
+
+```java
+package adapter;
+
+public class SocketAdapter implements Electronic110V{
+
+	private Electronic220V electronic220v;
+	
+	public SocketAdapter(Electronic220V electronic220v) {
+		this.electronic220v = electronic220v;
+	}
+	
+	@Override
+	public void powerOn() {
+		electronic220v.connect();
+	}
+}
+```
+
+* 220V 전압을 사용하는 전자기기를 110V 전압에 맞게 연결하기 위해 SocketAdapter 클래스를 생성합니다.
+
+
+```java
+public class Main {
+	public static void main(String[] args){
+
+		HairDryer dryer = new HairDryer();
+		connect(dryer);
+		
+		Cleaner cleaner = new Cleaner();
+		//connect(cleaner); 110V는 사용할 수 없다. 이 떄 Adapter 패턴 사용.
+		
+		/**
+		 * 220V인 청소기를 SocketAdapter 클래스의 생성자를 활용함으로써 110V의 Adapter에도 사용하고
+		 * 자기 자신의 상태는 변경하지 않고 인터페이스 형태로 맞추는 형태로 사용합니다.
+		 */
+		Electronic110V adapter = new SocketAdapter(cleaner);
+		connect(adapter);
+		
+		/**
+		 * 110V 어뎁터밖에 없는데 220V인 에어컨을 사용하는 상황 가정하여 어뎁터를 사와야합니다.
+		 * 객체 지향은 실물 그대로 반영하고자 한 것입니다.
+		 * 110V를 사용하고자 할 때 Adapter를 사용하여 220V로 변경해줍니다. 
+		 */
+		AirConditioner airConditioner = new AirConditioner();
+		Electronic110V airAdapter = new SocketAdapter(airConditioner);
+		connect(airAdapter);
+	}
+	
+	// 콘센트 connect
+	public static void connect(Electronic110V electronic110v) {
+		electronic110v.powerOn();
+	}
+}
+```
+
+* 이처럼 어뎁터 패턴은 한 인터페이스를 다른 인터페이스로 변환하는 역할을 합니다.
+* 또한 자기 자신의 상태는 변경하지 않고 호환성 문제로 함께 작동할 수 없는 두 인터페이스 간의 통신을 가능하게 합니다.
+
+## 3. 커맨드 패턴
 
 * 하나의 객체를 통해 여러 객체들에 명령을 할 때 사용하는 패턴입니다.
 * 요청을 캡슐화함으로써 여러 기능을 실행할 수 있는 재사용성이 높은 클래스를 설계하는 패턴입니다.
