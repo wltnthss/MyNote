@@ -101,4 +101,3 @@ jdbcUrl=jdbc:mysql://localhost:3306/guestbook?useUnicode=true&amp;characterEncod
 * 식별자가 코드유형ID, 코드 조합으로 구성되어있다.
 * SQL로 고객유형코드를 조회 시 코드유형ID = '100' 조건을 추가하여 사용한다.
 * 코드유형ID대신 코드유형영문명 = 'CUST_CLS' 처럼 코드유형 영문명을 사용하면 코드유형ID보다 직관적이어서 코딩 생산성을 높일 수 있습니다.
-
